@@ -1,7 +1,7 @@
 <p align="center">
   <img src="banner3.png" width="100%" alt="Carbon Mirror Project Banner" />
 </p>
-#The Carbon Mirror Project  
+The Carbon Mirror Project  
 *A Practical Standard for Lean Digital Infrastructure*
 
 The Carbon Mirror Project is an open, vendor-neutral framework for understanding and reducing the hidden energy, carbon, and operational waste embedded in modern digital systems.

@@ -20,7 +20,7 @@ This novella serves two purposes:
 - Chapter 7: The Audit  
 - Chapter 8: The Offer  
 - Chapter 9: Fracture Lines  
-*(Optional: Chapter 10 when completed)*
+- Chapter 10: The Doctrine and the Spark
 
 ---
 

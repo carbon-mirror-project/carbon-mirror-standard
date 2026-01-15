@@ -3,7 +3,7 @@
 </p>
 The Carbon Mirror Project  
 *A Practical Standard for Lean Digital Infrastructure*
-<br>
+
 The Carbon Mirror Project is an open, vendor-neutral framework for understanding and reducing the hidden energy, carbon, and operational waste embedded in modern digital systems.
 
 It is not a sustainability pledge.  

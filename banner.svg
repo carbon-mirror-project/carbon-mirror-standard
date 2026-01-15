@@ -1,0 +1,39 @@
+<svg width="1200" height="320" viewBox="0 0 1200 320" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .title {
+      font-family: 'Arial', sans-serif;
+      font-size: 58px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      fill: #000000;
+    }
+    .subtitle {
+      font-family: 'Arial', sans-serif;
+      font-size: 24px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      fill: #444444;
+    }
+  </style>
+
+  <!-- Background -->
+  <rect width="1200" height="320" fill="white"></rect>
+
+  <!-- Logo (left side) -->
+  <g transform="translate(80, 60)">
+    <!-- Outer diamond -->
+    <rect x="0" y="0" width="120" height="120" transform="rotate(45 60 60)" stroke="black" stroke-width="8" fill="none"></rect>
+    <!-- Inner square -->
+    <rect x="25" y="25" width="70" height="70" stroke="black" stroke-width="6" fill="none"></rect>
+    <!-- Bars -->
+    <line x1="60" y1="-30" x2="60" y2="20" stroke="black" stroke-width="8" stroke-linecap="round"></line>
+    <line x1="60" y1="100" x2="60" y2="150" stroke="black" stroke-width="8" stroke-linecap="round"></line>
+
+    <line x1="-30" y1="60" x2="20" y2="60" stroke="black" stroke-width="8" stroke-linecap="round"></line>
+    <line x1="100" y1="60" x2="150" y2="60" stroke="black" stroke-width="8" stroke-linecap="round"></line>
+  </g>
+
+  <!-- Text -->
+  <text x="300" y="135" class="title">THE CARBON MIRROR PROJECT</text>
+  <text x="300" y="200" class="subtitle">A Standard for Lean Digital Operations</text>
+</svg>

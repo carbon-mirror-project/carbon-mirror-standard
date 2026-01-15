@@ -28,3 +28,12 @@ The goal is simple:
 ## 📘 Contents of This Repository
 This repo contains:
 
+/standard/ – The evolving Carbon Mirror Standard (CMS)
+/level-1-guide/ – The Level 1 Field Guide (for practitioners)
+/examples/ – Practical examples, model routing samples, ETL timing cases, etc.
+/tools/ – Optional code, scripts, or helpers (MIT-licensed)
+/governance/ – RFC process, contribution guide, decision logs
+LICENSE – CC-BY 4.0 License for all textual content
+
+
+Additional folders will be added as the project matures.

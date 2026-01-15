@@ -1,0 +1,108 @@
+# Pull Request Template — Carbon Mirror Project
+
+Thank you for contributing to the Carbon Mirror Project!  
+Please complete the sections below to help maintain clarity, alignment, and quality.
+
+---
+
+## 1. What Does This PR Change?
+
+**Describe the change:**
+- What section(s) of the Standard or documentation does this modify?
+- Is this a clarification, correction, structural change, or new content?
+
+> _Example: “Clarifies the definition of ‘time-flexible workloads’ in the Timing Mirror.”_
+
+---
+
+## 2. Related Issue
+
+Please link the issue that this PR addresses:
+
+Fixes #____  
+Related to #____
+
+> All PRs must correspond to an open issue unless explicitly approved by maintainers.
+
+---
+
+## 3. Type of Change
+
+Select all that apply:
+
+- [ ] Clarification  
+- [ ] Correction  
+- [ ] Structural reorganization  
+- [ ] New explanatory content  
+- [ ] Example or table update  
+- [ ] Mirror pattern proposal  
+- [ ] Tooling reference update  
+- [ ] Governance or meta documentation  
+- [ ] Other: ____________
+
+---
+
+## 4. Alignment Check
+
+Please confirm the following:
+
+- [ ] This change preserves the neutrality of the Standard (no vendor bias)  
+- [ ] This change does not introduce breaking changes without an RFC  
+- [ ] This change maintains consistency with Mirror definitions  
+- [ ] This change improves clarity or correctness  
+- [ ] This change follows Markdown structure conventions  
+- [ ] This change aligns with the Carbon Mirror philosophy (precision, clarity, leverage)  
+
+---
+
+## 5. Motivation
+
+**Why is this change needed?**  
+Explain the reasoning, the problem being solved, or the improvement being made.
+
+> _Short and focused answers are ideal._
+
+---
+
+## 6. Impact Assessment
+
+**Does this PR impact any of the following?**
+
+- Mirror definitions:  
+  - [ ] Yes  
+  - [ ] No  
+
+- Certification criteria:  
+  - [ ] Yes  
+  - [ ] No  
+
+- RFC requirements:  
+  - [ ] Yes (attach or reference an RFC)  
+  - [ ] No  
+
+- Backward compatibility:  
+  - [ ] Maintained  
+  - [ ] Potentially affected (explain)  
+
+---
+
+## 7. Additional Notes
+
+Add any contextual information or questions for reviewers here.
+
+---
+
+## 8. Checklist Before Submission
+
+- [ ] My changes match project style and terminology  
+- [ ] I have proofread the text for clarity and grammar  
+- [ ] I have not introduced marketing or promotional content  
+- [ ] I have not mixed unrelated changes  
+- [ ] I have reviewed GOVERNANCE.md and CONTRIBUTING.md  
+- [ ] I am ready for maintainer review  
+
+---
+
+Thank you for helping strengthen the Carbon Mirror Standard.
+Your contribution supports a cleaner, leaner, more intentional digital future.
+

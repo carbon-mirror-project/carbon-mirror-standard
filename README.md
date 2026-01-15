@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="banner.svg" width="100%" alt="Carbon Mirror Project Banner" />
+  <img src="banner2.svg" width="100%" alt="Carbon Mirror Project Banner" />
 </p>
 # The Carbon Mirror Project  
 *A Practical Standard for Lean Digital Infrastructure*

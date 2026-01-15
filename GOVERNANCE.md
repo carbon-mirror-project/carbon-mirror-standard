@@ -133,4 +133,121 @@ If maintainers cannot reach consensus:
 4. Simple majority wins  
 5. A dissenter may escalate to an RFC if the impact is large enough  
 
-If a S
+If a Steering Group exists, it may be used as a neutral tie-breaker for high-impact decisions.
+
+---
+
+# 4. Change Control and Release Cadence
+
+## 4.1 Stability Requirements  
+The Carbon Mirror Project prioritizes stability over speed.
+
+Changes must:
+
+- Maintain backward compatibility whenever possible  
+- Include clear documentation and rationale  
+- Avoid sudden or disruptive restructuring  
+
+Breaking changes require:
+
+- RFC  
+- Notice period  
+- Migration guidance  
+- New version tag  
+
+---
+
+## 4.2 Release Cadence  
+The Standard follows a staged release cycle:
+
+- **Level 1**: Updated infrequently; only clarifications and fixes  
+- **Level 2**: Updated as patterns mature and examples emerge  
+- **Level 3**: Versioned as a strict specification  
+
+Suggested cadence (non-binding):
+
+- Minor clarifications: anytime  
+- Minor structural updates: quarterly  
+- Major releases: annually or semiannually  
+- Certification changes: seldom and only after RFC  
+
+---
+
+# 5. Ownership and Licensing
+
+The Carbon Mirror Project is licensed under **MIT**, ensuring:
+
+- Maximum reuse  
+- Maximum flexibility  
+- Broad adoption encouraged  
+
+No individual, company, or vendor owns the Standard or may claim exclusive rights to its implementation.
+
+---
+
+# 6. Community Participation
+
+Participation is open to:
+
+- Engineers  
+- Researchers  
+- Sustainability specialists  
+- Infrastructure operators  
+- Data center experts  
+- Policy analysts  
+- Students  
+- Anyone with insight or interest  
+
+All participants must follow the **CODE_OF_CONDUCT.md**.
+
+Minimal barriers, open participation, and public visibility are core to the project.
+
+---
+
+# 7. Long-Term Vision
+
+The governance structure is designed to evolve as the project evolves:
+
+- **Level 1–2 focus**: Clarity, adoption, and text stability  
+- **Level 3 focus**: Formalizing a durable, auditable standard  
+- **Post-Level 3**:  
+  - Steering Group  
+  - Industry alignment  
+  - Certification ecosystem  
+  - Public Seal registry  
+  - Educational resources  
+  - Annual updates  
+
+The goal is not simply to publish a standard—  
+but to steward it for decades.
+
+---
+
+# 8. Amendments to Governance
+
+Changes to this governance document require:
+
+- A public issue  
+- Discussion among maintainers  
+- Maintainer consensus  
+- (If significant) an RFC  
+- Version bump to this file  
+
+Governance must remain stable but adaptable.
+
+---
+
+# The Point
+
+Governance ensures that the Carbon Mirror Standard remains:
+
+- Clear  
+- Neutral  
+- Auditable  
+- Credible  
+- Community-driven  
+- Built to last  
+
+Good governance is not bureaucracy.  
+It is the structure that protects the integrity of the Standard as it grows.
+

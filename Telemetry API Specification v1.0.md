@@ -13,7 +13,9 @@ This document defines the technical requirements for companies seeking Obsidian 
 
 #### A. Ghost Compute Metrics
 
-**Purpose:** Identify idling infrastructure consuming resources with minimal utilization.
+**Purpose:** Measure wasted energy consumption from idling infrastructure relative to total productive energy use.
+
+**Core Principle:** Ghost Compute is measured as **wasted energy as a percentage of total energy consumption**, not simply idle instance count. This ensures fair comparison across organizations of different scales—a startup with 10 servers and a hyperscaler with 100,000 servers are judged by energy efficiency per unit of productive work.
 
 **Required Data Points:**
 
@@ -31,24 +33,76 @@ This document defines the technical requirements for companies seeking Obsidian 
         "memory_utilization_30day_avg": 8.1,
         "network_io_30day_avg_mbps": 0.4,
         "disk_io_30day_avg_iops": 12,
+        "power_draw_watts": 285,
         "classification": "ghost",
-        "monthly_cost_usd": 280.32
+        "monthly_cost_usd": 280.32,
+        "monthly_energy_kwh": 205.2,
+        "monthly_energy_cost_usd": 20.52
       }
     ],
-    "summary": {
+    "energy_summary": {
       "total_instances": 847,
       "ghost_instances": 34,
-      "ghost_ratio": 0.040,
-      "monthly_waste_usd": 9530.88
+      "productive_instances": 813,
+      "ghost_energy_kwh_daily": 232.8,
+      "productive_energy_kwh_daily": 4891.2,
+      "total_energy_kwh_daily": 5124.0,
+      "ghost_energy_ratio": 0.0454,
+      "ghost_efficiency_score": 95.46,
+      "pue_multiplier": 1.42,
+      "total_energy_with_cooling_kwh_daily": 7276.1
+    },
+    "physical_impact": {
+      "monthly_waste_usd": 9530.88,
+      "co2e_kg_monthly": 5890,
+      "water_liters_monthly": 12970,
+      "component_stress_instances": 34,
+      "grid_capacity_wasted_mw": 0.245
     }
   }
 }
 ```
 
 **Calculation Rules:**
+
+**Ghost Instance Classification:**
 - Instance classified as "ghost" if `cpu_utilization_30day_avg < 10%` AND `memory_utilization_30day_avg < 10%`
 - Metrics calculated as rolling 30-day average, updated every 15 minutes
 - All running instances must be reported (no cherry-picking)
+
+**Energy-Based Efficiency Score:**
+```python
+# Calculate wasted energy
+ghost_energy_kwh = sum(instance.power_draw_kw * 24 for instance in ghost_instances)
+
+# Calculate productive energy  
+productive_energy_kwh = sum(instance.power_draw_kw * 24 for instance in productive_instances)
+
+# Total energy consumption
+total_energy_kwh = ghost_energy_kwh + productive_energy_kwh
+
+# Ghost energy ratio (waste percentage)
+ghost_energy_ratio = ghost_energy_kwh / total_energy_kwh
+
+# Efficiency score (inverted - higher is better)
+ghost_efficiency_score = (1 - ghost_energy_ratio) * 100
+
+# Score brackets:
+# 98%+ (≤2% waste) = Apex tier contribution
+# 95-97.9% (2-5% waste) = Prime tier contribution  
+# 90-94.9% (5-10% waste) = Core tier contribution
+# 85-89.9% (10-15% waste) = Base Obsidian contribution
+# <85% (>15% waste) = Below Obsidian threshold
+```
+
+**PUE (Power Usage Effectiveness) Integration:**
+Total energy impact includes cooling overhead:
+```python
+total_facility_energy = total_energy_kwh * pue_multiplier
+# Industry average PUE: 1.4-1.6
+# Efficient datacenters: 1.2-1.3  
+# Best-in-class: <1.2
+```
 
 **Data Source Integration:**
 - **AWS:** CloudWatch Metrics API (`GetMetricStatistics`)
@@ -304,7 +358,353 @@ This document defines the technical requirements for companies seeking Obsidian 
 
 ---
 
-### III. API Integration Patterns
+### III. Composite Efficiency Scoring and Tier Certification
+
+#### A. Composite Efficiency Calculation
+
+Obsidian certification status is determined by a **weighted composite score** across all four efficiency metrics. This prevents companies from gaming individual metrics while ignoring others.
+
+**Scoring Formula:**
+
+```python
+def calculate_obsidian_composite_score(company_data):
+    """
+    Calculate overall efficiency score for tier certification.
+    All four metrics must meet minimum thresholds.
+    """
+    
+    # Metric 1: Ghost Compute Efficiency (energy-based)
+    ghost_score = calculate_ghost_efficiency_score(company_data.ghost_compute)
+    
+    # Metric 2: Model Efficiency (routine-to-SLM ratio)
+    model_score = calculate_model_efficiency_score(company_data.model_efficiency)
+    
+    # Metric 3: Dark Data Efficiency (storage utilization)
+    storage_score = calculate_dark_data_efficiency_score(company_data.dark_data)
+    
+    # Metric 4: Heat Recovery (if thermal load ≥50kW, otherwise exempt)
+    if company_data.thermal_load_kw >= 50:
+        heat_score = calculate_heat_recovery_score(company_data.heat_recovery)
+        weights = [0.25, 0.25, 0.25, 0.25]
+        scores = [ghost_score, model_score, storage_score, heat_score]
+    else:
+        # Small deployments: heat recovery exempt
+        weights = [0.33, 0.33, 0.34]
+        scores = [ghost_score, model_score, storage_score]
+    
+    # Weighted average
+    composite_score = sum(score * weight for score, weight in zip(scores, weights))
+    
+    # Individual metric minimums (prevent single-metric gaming)
+    min_acceptable = 75  # No metric can fall below 75% efficiency
+    
+    if any(score < min_acceptable for score in scores):
+        return {
+            "composite_score": composite_score,
+            "tier": "Silver",
+            "reason": f"At least one metric below {min_acceptable}% threshold",
+            "failing_metrics": [name for name, score in zip(
+                ["ghost_compute", "model_efficiency", "dark_data", "heat_recovery"][:len(scores)], 
+                scores
+            ) if score < min_acceptable]
+        }
+    
+    # Determine tier based on composite score
+    return {
+        "composite_score": round(composite_score, 2),
+        "tier": get_tier_from_score(composite_score),
+        "individual_scores": {
+            "ghost_compute": ghost_score,
+            "model_efficiency": model_score,
+            "dark_data": storage_score,
+            "heat_recovery": heat_score if company_data.thermal_load_kw >= 50 else "exempt"
+        }
+    }
+
+def get_tier_from_score(composite_score):
+    """Map composite efficiency score to certification tier"""
+    if composite_score >= 95.0:
+        return "Obsidian Apex"
+    elif composite_score >= 90.0:
+        return "Obsidian Prime"
+    elif composite_score >= 85.0:
+        return "Obsidian Core"
+    elif composite_score >= 80.0:
+        return "Obsidian"
+    else:
+        return "Silver"  # Below Obsidian threshold
+```
+
+#### B. Certification Tier Structure
+
+**Obsidian Tiers** (Real-time telemetry required):
+
+| Tier | Composite Score | Description | Typical Profile |
+|------|----------------|-------------|-----------------|
+| **Obsidian Apex** | 95.0%+ | Elite efficiency - best-in-class operations | <3% of certified orgs |
+| **Obsidian Prime** | 90.0-94.9% | High efficiency - strong operational discipline | ~12% of certified orgs |
+| **Obsidian Core** | 85.0-89.9% | Above-average efficiency - solid performance | ~35% of certified orgs |
+| **Obsidian** | 80.0-84.9% | Baseline efficiency - meets minimum standard | ~50% of certified orgs |
+| **Silver** | <80.0% | Pre-Obsidian - has accountability but not yet optimized | - |
+| **Bronze** | N/A | Completed Friction Audit (one-time achievement) | - |
+
+**Tier Transition Rules:**
+
+```python
+def monitor_tier_transitions(company_id):
+    """
+    Real-time monitoring of tier status with 7-day grace period
+    for downward transitions, immediate promotion for upward.
+    """
+    
+    current_tier = get_current_tier(company_id)
+    current_score = calculate_obsidian_composite_score(company_id)
+    new_tier = current_score["tier"]
+    
+    if new_tier == current_tier:
+        # No change, reset any grace period counters
+        reset_grace_period(company_id)
+        return
+    
+    # UPWARD TRANSITION: Immediate promotion
+    if is_higher_tier(new_tier, current_tier):
+        promote_tier(
+            company_id=company_id,
+            from_tier=current_tier,
+            to_tier=new_tier,
+            timestamp=current_timestamp(),
+            reason="Composite efficiency improved"
+        )
+        
+        publish_promotion_event(company_id, current_tier, new_tier)
+        reset_grace_period(company_id)
+        return
+    
+    # DOWNWARD TRANSITION: 7-day grace period
+    if is_lower_tier(new_tier, current_tier):
+        grace_period_days = increment_grace_period(company_id)
+        
+        if grace_period_days < 7:
+            publish_warning(
+                company_id=company_id,
+                message=f"Efficiency below {current_tier} threshold. "
+                        f"Revocation to {new_tier} in {7 - grace_period_days} days if not resolved.",
+                days_remaining=7 - grace_period_days
+            )
+        else:
+            # Grace period expired
+            revoke_tier(
+                company_id=company_id,
+                from_tier=current_tier,
+                to_tier=new_tier,
+                timestamp=current_timestamp(),
+                reason=f"Composite efficiency below {current_tier} threshold for 7 consecutive days"
+            )
+            
+            publish_revocation_event(company_id, current_tier, new_tier, current_score)
+            reset_grace_period(company_id)
+```
+
+#### C. Public Dashboard Display
+
+**Example Company Status:**
+
+```json
+{
+  "company_name": "Example Corp",
+  "company_id": "examplecorp",
+  "certification_tier": "Obsidian Prime",
+  "composite_efficiency": 92.3,
+  "last_updated": "2026-01-16T15:45:00Z",
+  "individual_metrics": {
+    "ghost_compute": {
+      "efficiency_score": 94.2,
+      "ghost_energy_ratio": 0.058,
+      "wasted_kwh_daily": 342,
+      "tier_contribution": "Prime"
+    },
+    "model_efficiency": {
+      "efficiency_score": 91.8,
+      "routine_to_slm_ratio": 0.918,
+      "tier_contribution": "Prime"
+    },
+    "dark_data": {
+      "efficiency_score": 89.7,
+      "dark_data_ratio": 0.103,
+      "tier_contribution": "Core"
+    },
+    "heat_recovery": {
+      "efficiency_score": 93.5,
+      "recovery_ratio": 0.935,
+      "tier_contribution": "Prime"
+    }
+  },
+  "physical_impact": {
+    "financial_waste_monthly_usd": 47200,
+    "co2e_monthly_kg": 28400,
+    "water_monthly_liters": 89000,
+    "grid_capacity_wasted_mw": 1.2,
+    "equivalent_homes": 960
+  },
+  "tier_history": [
+    {"date": "2025-11-03", "tier": "Obsidian Core", "score": 87.1},
+    {"date": "2025-12-18", "tier": "Obsidian Prime", "score": 90.4},
+    {"date": "2026-01-16", "tier": "Obsidian Prime", "score": 92.3}
+  ],
+  "grid_citizen": false
+}
+```
+
+#### D. Grid Emergency Response (Optional Enhancement)
+
+Companies can earn **Grid Citizen** designation by implementing automated emergency response protocols.
+
+**Requirements for Grid Citizen Status:**
+
+1. **Real-time grid operator API integration**
+2. **Automated load shedding** during declared emergencies (Stage 1+)
+3. **50%+ ghost compute reduction** within 15 minutes of emergency declaration
+4. **Documented recovery procedures** after emergency cleared
+5. **Successful emergency response** in 100% of events in past 12 months
+
+**Grid Emergency Response Verification:**
+
+```python
+def verify_grid_citizen_status(company_id):
+    """
+    Validate that company responds appropriately to grid emergencies.
+    Failure results in immediate Grid Citizen revocation.
+    """
+    
+    grid_region = get_company_grid_region(company_id)
+    emergency_events = get_grid_emergencies(grid_region, period="12months")
+    
+    successful_responses = 0
+    failed_responses = []
+    
+    for event in emergency_events:
+        if event.severity >= "Stage 1":
+            # Measure ghost compute before and during emergency
+            ghost_before = get_ghost_compute_mw(company_id, event.start_time - timedelta(hours=1))
+            ghost_during = get_ghost_compute_mw(company_id, event.start_time + timedelta(minutes=30))
+            
+            reduction_pct = (ghost_before - ghost_during) / ghost_before if ghost_before > 0 else 0
+            
+            if reduction_pct >= 0.50:  # Met 50% reduction requirement
+                successful_responses += 1
+            else:
+                failed_responses.append({
+                    "event": event.name,
+                    "date": event.start_time,
+                    "required_reduction": 0.50,
+                    "actual_reduction": reduction_pct,
+                    "capacity_withheld_mw": ghost_during
+                })
+    
+    if len(emergency_events) == 0:
+        # No emergencies in region during period - maintain status if already certified
+        return {"grid_citizen": get_current_grid_citizen_status(company_id), "reason": "No grid emergencies in past 12 months"}
+    
+    success_rate = successful_responses / len(emergency_events)
+    
+    if success_rate == 1.0:
+        return {
+            "grid_citizen": True,
+            "events_responded": successful_responses,
+            "total_events": len(emergency_events),
+            "success_rate": 1.0
+        }
+    else:
+        return {
+            "grid_citizen": False,
+            "events_responded": successful_responses,
+            "total_events": len(emergency_events),
+            "success_rate": success_rate,
+            "failed_responses": failed_responses,
+            "reason": "Did not achieve 100% emergency response success rate"
+        }
+```
+
+**Grid Citizen Public Display:**
+
+```json
+{
+  "company_name": "Responsible Corp",
+  "certification_tier": "Obsidian Apex",
+  "grid_citizen": true,
+  "grid_citizen_details": {
+    "emergency_response": "Automated",
+    "last_test_date": "2025-12-08",
+    "test_result": "Passed (shed 2.4 MW in 12 minutes)",
+    "events_responded": 4,
+    "total_events": 4,
+    "success_rate": 1.0,
+    "public_benefit_homes_equivalent": 1920
+  }
+}
+```
+
+**Immediate Revocation for Emergency Non-Compliance:**
+
+If a Grid Citizen certified company fails to respond appropriately during a grid emergency:
+
+```python
+if grid_emergency_detected and grid_citizen_status and reduction_pct < 0.50:
+    revoke_immediately(
+        company_id=company_id,
+        from_tier=current_tier,
+        to_tier="Silver",
+        revocation_type="EMERGENCY_NON_COMPLIANCE",
+        restoration_blocked_days=90,
+        public_notice=f"Failed to shed ghost compute during {event.name} grid emergency. "
+                     f"Required: 50% reduction. Actual: {reduction_pct:.1%}. "
+                     f"Capacity withheld: {ghost_during:.2f} MW (equivalent to {homes_equivalent} homes)."
+    )
+```
+
+---
+
+### IV. Shared Infrastructure Impact Reporting
+
+In addition to individual efficiency metrics, the CMS Dashboard publishes the **Shared Infrastructure Impact** for each certified company. This makes visible how operational waste degrades service quality for other users of shared digital resources.
+
+**Shared Infrastructure Impact Categories:**
+
+```json
+{
+  "shared_infrastructure_impact": {
+    "network_waste": {
+      "unnecessary_api_calls_daily": 2400000,
+      "bandwidth_consumed_monthly_tb": 180,
+      "peak_hour_traffic_percentage": 0.45,
+      "equivalent_remote_users_denied": 12000,
+      "assessment": "High impact - significant peak-hour congestion contribution"
+    },
+    "storage_waste": {
+      "dark_data_volume_tb": 840,
+      "backup_bandwidth_daily_tb": 6.2,
+      "network_stress_level": "Moderate",
+      "assessment": "Moderate impact - backup operations contribute to backbone congestion"
+    },
+    "grid_impact": {
+      "wasted_grid_draw_mw": 1.8,
+      "peak_contribution_mw": 2.4,
+      "equivalent_homes": 1440,
+      "equivalent_hospitals": 3,
+      "equivalent_emergency_dispatch_centers": 12,
+      "grid_citizen_status": false,
+      "assessment": "Significant impact - wasted capacity could serve critical infrastructure"
+    },
+    "public_summary": "Operational waste equivalent to denying service to 12,000 remote users, consuming grid capacity for 1,440 homes, and contributing to network congestion during peak hours."
+  }
+}
+```
+
+**This data is prominently displayed but not directly scored**, as it is a consequence of the efficiency metrics rather than a separate measurement. However, making it visible transforms corporate efficiency into a public good story.
+
+---
+
+### V. API Integration Patterns
 
 #### A. Cloud Provider Integration (Recommended)
 
@@ -406,7 +806,7 @@ Agent source code: `github.com/carbon-mirror-standard/telemetry-agent`
 
 ---
 
-### IV. Data Transmission and Security
+### VI. Data Transmission and Security
 
 #### A. Authentication
 
@@ -449,7 +849,7 @@ Agent source code: `github.com/carbon-mirror-standard/telemetry-agent`
 
 ---
 
-### V. Telemetry Submission Schedule
+### VII. Telemetry Submission Schedule
 
 #### Obsidian Real-Time Requirements
 
@@ -482,7 +882,7 @@ Total monthly bandwidth: ~7.5GB/month
 
 ---
 
-### VI. Telemetry API Endpoints (CMS Dashboard)
+### VIII. Telemetry API Endpoints (CMS Dashboard)
 
 Companies submit telemetry to these standardized endpoints:
 
@@ -522,7 +922,7 @@ Companies can register webhooks to receive alerts:
 
 ---
 
-### VII. Reference Implementation
+### IX. Reference Implementation
 
 **Minimal Python Example (AWS):**
 
@@ -539,17 +939,38 @@ class CMSTelemetrySubmitter:
         self.cloudwatch = boto3.client('cloudwatch')
         self.ec2 = boto3.client('ec2')
     
+    def get_instance_power_draw(self, instance_type):
+        """
+        Estimate power draw based on instance type.
+        Real implementations should use actual power monitoring.
+        """
+        # Simplified power draw estimates (watts)
+        power_map = {
+            't2.micro': 10, 't2.small': 15, 't2.medium': 20,
+            'm5.large': 85, 'm5.xlarge': 140, 'm5.2xlarge': 285,
+            'c5.large': 95, 'c5.xlarge': 190, 'c5.2xlarge': 380,
+            'r5.large': 90, 'r5.xlarge': 180, 'r5.2xlarge': 360,
+            # Add more as needed
+        }
+        return power_map.get(instance_type, 100)  # Default 100W if unknown
+    
     def collect_ghost_compute_metrics(self):
-        """Collect CPU utilization for all running instances"""
+        """
+        Collect energy-based ghost compute metrics for all running instances
+        """
         instances = self.ec2.describe_instances(
             Filters=[{'Name': 'instance-state-name', 'Values': ['running']}]
         )
         
         ghost_instances = []
+        productive_instances = []
+        ghost_energy_kwh_daily = 0
+        productive_energy_kwh_daily = 0
         
         for reservation in instances['Reservations']:
             for instance in reservation['Instances']:
                 instance_id = instance['InstanceId']
+                instance_type = instance['InstanceType']
                 
                 # Get 30-day average CPU utilization
                 metrics = self.cloudwatch.get_metric_statistics(
@@ -562,16 +983,51 @@ class CMSTelemetrySubmitter:
                     Statistics=['Average']
                 )
                 
+                if len(metrics['Datapoints']) == 0:
+                    continue
+                
                 avg_cpu = sum(m['Average'] for m in metrics['Datapoints']) / len(metrics['Datapoints'])
                 
+                # Estimate power draw
+                power_watts = self.get_instance_power_draw(instance_type)
+                energy_kwh_daily = (power_watts / 1000) * 24
+                
+                instance_data = {
+                    'instance_id': instance_id,
+                    'instance_type': instance_type,
+                    'cpu_utilization_30day_avg': round(avg_cpu, 2),
+                    'power_draw_watts': power_watts,
+                    'energy_kwh_daily': round(energy_kwh_daily, 3)
+                }
+                
                 if avg_cpu < 10.0:
-                    ghost_instances.append({
-                        'instance_id': instance_id,
-                        'instance_type': instance['InstanceType'],
-                        'cpu_utilization_30day_avg': round(avg_cpu, 2)
-                    })
+                    # Ghost instance
+                    ghost_instances.append(instance_data)
+                    ghost_energy_kwh_daily += energy_kwh_daily
+                else:
+                    # Productive instance
+                    productive_instances.append(instance_data)
+                    productive_energy_kwh_daily += energy_kwh_daily
         
-        return ghost_instances
+        # Calculate energy-based efficiency metrics
+        total_energy = ghost_energy_kwh_daily + productive_energy_kwh_daily
+        ghost_energy_ratio = ghost_energy_kwh_daily / total_energy if total_energy > 0 else 0
+        ghost_efficiency_score = (1 - ghost_energy_ratio) * 100
+        
+        return {
+            'ghost_instances': ghost_instances,
+            'productive_instances': productive_instances,
+            'energy_summary': {
+                'total_instances': len(ghost_instances) + len(productive_instances),
+                'ghost_instances': len(ghost_instances),
+                'productive_instances': len(productive_instances),
+                'ghost_energy_kwh_daily': round(ghost_energy_kwh_daily, 2),
+                'productive_energy_kwh_daily': round(productive_energy_kwh_daily, 2),
+                'total_energy_kwh_daily': round(total_energy, 2),
+                'ghost_energy_ratio': round(ghost_energy_ratio, 4),
+                'ghost_efficiency_score': round(ghost_efficiency_score, 2)
+            }
+        }
     
     def submit_telemetry(self, metric_type, data):
         """Submit telemetry to CMS Dashboard"""
@@ -598,7 +1054,11 @@ submitter = CMSTelemetrySubmitter(
 
 ghost_data = submitter.collect_ghost_compute_metrics()
 result = submitter.submit_telemetry('ghost-compute', ghost_data)
-print(f"Submitted {len(ghost_data)} ghost instances. Status: {result['status']}")
+
+print(f"Ghost Compute Telemetry Submitted:")
+print(f"  Ghost Energy Ratio: {ghost_data['energy_summary']['ghost_energy_ratio']:.2%}")
+print(f"  Efficiency Score: {ghost_data['energy_summary']['ghost_efficiency_score']:.1f}%")
+print(f"  Status: {result['status']}")
 ```
 
 Full reference implementations available at:
@@ -609,7 +1069,7 @@ Full reference implementations available at:
 
 ---
 
-### VIII. Compliance and Auditing
+### X. Compliance and Auditing
 
 #### Telemetry Validation
 
@@ -647,7 +1107,7 @@ def validate_telemetry_submission(company_id, submission):
 
 ---
 
-### IX. Migration Path for New Adopters
+### XI. Migration Path for New Adopters
 
 **Phase 1: Read-Only Integration (Weeks 1-2)**
 - Grant CMS Dashboard API access
@@ -668,7 +1128,7 @@ def validate_telemetry_submission(company_id, submission):
 
 ---
 
-### X. Future Extensions
+### XII. Future Extensions
 
 **Planned for v2.0:**
 - Carbon intensity-aware scheduling telemetry (workload timing vs grid carbon)
@@ -679,7 +1139,7 @@ def validate_telemetry_submission(company_id, submission):
 
 ---
 
-### XI. Open Source Commitment
+### XIII. Open Source Commitment
 
 **All telemetry standards, schemas, and reference implementations are open source.**
 

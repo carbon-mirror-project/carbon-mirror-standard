@@ -72,11 +72,13 @@ Each Mirror reveals a different form of digital inefficiency that organizations 
 
 ### For Education & Training
 
-* **[Carbon Mirror University Strategy](learning/Education%2C%20Certification%2C%20and%20Revenue%20Model.md)** — Complete certification programs, course curriculum, Moodle integration strategy, and revenue model ($2-3M annually by Year 5)
+The Carbon Mirror Foundation supports open education through:
+- Community workshops
+- Public documentation
+- Implementation guides
 
-### For Story Enthusiasts
-
-* **[Mirror Mirror Novel](stories/mirror-mirror/)** — Fictional narrative exploring CMS adoption in a struggling tech company facing competitive pressure and infrastructure crisis
+**For professional certification programs and enterprise training:**  
+Independent training providers offer commercial CMS certification courses. For information about professional training services, visit [Carbon Mirror Labs](https://carbonmirrorlabs.com).
 
 ---
 
@@ -158,7 +160,6 @@ To explore the certification structure in detail, see: [`/level-1-guide/SUMMARY.
 * **Level 3 (Formal Standard)** — 📋 Upcoming
 * **Certification Program** — 🎓 Design phase
 * **Tooling Ecosystem** — 🛠️ Open for contributions
-* **Carbon Mirror University** — 📚 Strategy complete, implementation pending
 
 The Standard is iterative, evidence-based, and informed by real pilot outcomes.
 
@@ -203,7 +204,24 @@ The official roadmap is here: [`ROADMAP.md`](ROADMAP.md)
 * Certification program launch
 * Mirror-aligned best-practice library
 * Real-world case studies contributed by practitioners
-* Carbon Mirror University (Moodle-based platform)
+
+---
+
+## 🏢 Related Organizations
+
+**Carbon Mirror Foundation** (this repository)
+- Maintains the open Carbon Mirror Standard
+- Community-driven governance
+- Free and open documentation
+- Non-profit structure (in development)
+
+**Carbon Mirror Labs Inc.** (independent commercial entity)
+- Provides professional CMS training and certification
+- Offers consulting and implementation services
+- Operates independently from the CMS Foundation
+- Not affiliated with Foundation governance
+
+For commercial training and consulting services, visit: [carbonmirrorlabs.com](https://carbonmirrorlabs.com)
 
 ---
 
@@ -238,17 +256,14 @@ This project helps organizations capture the opportunity hiding inside that trut
 ---
 
 ## 🏗️ Repository Structure
-
 ```
 carbon-mirror-standard/
 ├── level-1-guide/          # Complete Level 1 implementation manual
 ├── governance/             # Foundation governance and decision-making
-├── learning/               # Education, certification, and training materials
+├── learning/               # Community education materials
 ├── standard/               # Core technical specifications
 ├── examples/               # Reference implementations and use cases
 ├── tools/                  # Utilities and helper scripts
-├── stories/                # Narrative explorations of CMS adoption
-│   └── mirror-mirror/      # Novel: CMS implementation story
 ├── .github/                # Issue templates, PR templates
 ├── README.md               # This file
 ├── ROADMAP.md              # Project timeline and milestones
@@ -274,7 +289,7 @@ While initiated by an individual contributor, the intent is to grow into a commu
 * **Repository:** [github.com/carbon-mirror-project/carbon-mirror-standard](https://github.com/carbon-mirror-project/carbon-mirror-standard)
 * **Issues:** [Report bugs or suggest improvements](https://github.com/carbon-mirror-project/carbon-mirror-standard/issues)
 * **Discussions:** Coming soon
-* **Email:** Coming soon
+* **Commercial Services:** [Carbon Mirror Labs](https://carbonmirrorlabs.com)
 
 ---
 
@@ -292,7 +307,6 @@ If the Carbon Mirror Standard is valuable to your work:
 ## 📖 Citation
 
 If you reference the Carbon Mirror Standard in academic or professional work, please cite:
-
 ```
 Carbon Mirror Project. (2025). Carbon Mirror Standard: Level 1 Field Guide.
 Retrieved from https://github.com/carbon-mirror-project/carbon-mirror-standard

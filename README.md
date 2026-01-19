@@ -7,24 +7,6 @@
 [![Contributors Welcome](https://img.shields.io/badge/contributors-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](PULL_REQUEST_TEMPLATE)
 
-## 🏢 Related Organizations
-
-**Carbon Mirror Foundation** (this repository)
-- Maintains the open Carbon Mirror Standard
-- Community-driven governance
-- Free and open documentation
-- Non-profit structure (in development)
-
-**Carbon Mirror Labs Inc.** (independent commercial entity)
-- Provides professional CMS training and certification
-- Offers consulting and implementation services
-- Operates independently from the CMS Foundation
-- Not affiliated with Foundation governance
-
-For commercial training and consulting services, visit: [carbonmirrorlabs.com](https://carbonmirrorlabs.com)
-
----
-
 The Carbon Mirror Project is an open, vendor-neutral framework for understanding and reducing the hidden energy, carbon, and operational waste embedded in modern digital systems.
 
 **It is not a sustainability pledge.**  
@@ -58,6 +40,26 @@ The Carbon Mirror is built on **four Mirrors** — four ways to see what was pre
 4. **Circularity Mirror** — Waste-to-Yield Thinking
 
 Each Mirror reveals a different form of digital inefficiency that organizations routinely overlook.
+
+---
+
+## 📘 Documentation Status
+
+**The Carbon Mirror Project is currently in ACTIVE DEVELOPMENT.**
+
+### Available Now (Production-Ready):
+
+✅ **[Level 1 Field Guide](level-1-guide/)** — Complete implementation manual with pilot project guide, the Four Mirrors methodology, and certification criteria  
+✅ **[Auto-Certification Logic Specification](CMS_Auto_Certification_Logic_Spec.md)** — Algorithmic rules for tier determination (Bronze, Silver, Obsidian)  
+✅ **[Telemetry API Specification](Telemetry%20API%20Specification%20v1.0.md)** — Technical integration guide for live efficiency monitoring  
+✅ **[Economic Justification White Paper](Economic%20Justification%20White%20Paper.md)** — Business case and ROI analysis  
+✅ **[Governance Model](governance/Governance%20Model%20v1.0.md)** — Foundation structure and decision-making framework
+
+### In Development:
+
+🚧 **Formal Carbon Mirror Standard v1.0** — Consolidation of specifications into single normative document (Target: Q1 2026)
+
+**For pilot implementations:** The Level 1 Field Guide contains sufficient detail to begin implementation. The formal standard will consolidate and ratify these working specifications.
 
 ---
 
@@ -298,7 +300,27 @@ This initiative is developed publicly and collaboratively under the **carbon-mir
 
 While initiated by an individual contributor, the intent is to grow into a community-driven standard supported by practitioners, researchers, and engineers committed to clarity and operational excellence.
 
-**If you build or operate digital systems, you're welcome here.**
+**Current Status:** Active development. Core specifications are stable and ready for pilot implementations. The formal standard document is being consolidated for Q1 2026 publication.
+
+If you build or operate digital systems, you're welcome here.
+
+---
+
+## 🏢 Related Organizations
+
+**Carbon Mirror Foundation** (this repository)
+- Maintains the open Carbon Mirror Standard
+- Community-driven governance
+- Free and open documentation
+- Non-profit structure (in development)
+
+**Carbon Mirror Labs Inc.** (independent commercial entity)
+- Professional CMS training and certification programs
+- Consulting and implementation services
+- Operates independently from CMS Foundation governance
+- Not affiliated with Foundation decision-making
+
+For commercial training and consulting: [carbonmirrorlabs.com](https://carbonmirrorlabs.com)
 
 ---
 

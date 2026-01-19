@@ -7,6 +7,24 @@
 [![Contributors Welcome](https://img.shields.io/badge/contributors-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](PULL_REQUEST_TEMPLATE)
 
+## 🏢 Related Organizations
+
+**Carbon Mirror Foundation** (this repository)
+- Maintains the open Carbon Mirror Standard
+- Community-driven governance
+- Free and open documentation
+- Non-profit structure (in development)
+
+**Carbon Mirror Labs Inc.** (independent commercial entity)
+- Provides professional CMS training and certification
+- Offers consulting and implementation services
+- Operates independently from the CMS Foundation
+- Not affiliated with Foundation governance
+
+For commercial training and consulting services, visit: [carbonmirrorlabs.com](https://carbonmirrorlabs.com)
+
+---
+
 The Carbon Mirror Project is an open, vendor-neutral framework for understanding and reducing the hidden energy, carbon, and operational waste embedded in modern digital systems.
 
 **It is not a sustainability pledge.**  

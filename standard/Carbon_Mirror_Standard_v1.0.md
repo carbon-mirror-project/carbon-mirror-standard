@@ -95,7 +95,7 @@ Measurements MUST be reproducible, continuous, attributable, comparable, and aud
 
 ### 4.3.1 Efficiency Mirror Score (EMS)
 
-```text
+
 EMS = 100 × (1 - (Wasted_Compute / Total_Provisioned_Compute))
 4.3.2 Timing Mirror Score (TMS)
 TMS = 100 × (1 - (Carbon_Intensity_Weighted_Runtime / Worst_Case_Runtime))

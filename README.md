@@ -96,9 +96,12 @@ The Carbon Mirror Foundation supports open education through:
 - Community workshops
 - Public documentation
 - Implementation guides
+- Open-access learning materials
 
-**For professional certification programs and enterprise training:**  
-Independent training providers offer commercial CMS certification courses. For information about professional training services, visit [Carbon Mirror Labs](https://carbonmirrorlabs.com).
+**For professional certification programs:**  
+Independent training providers may offer commercial CMS certification courses and consulting services. Organizations interested in professional training should evaluate providers based on their needs.
+
+*Note: The Carbon Mirror Foundation does not endorse or operate commercial training programs. The standard is open for any qualified provider to offer training.*
 
 ---
 
@@ -227,24 +230,6 @@ The official roadmap is here: [`ROADMAP.md`](ROADMAP.md)
 
 ---
 
-## 🏢 Related Organizations
-
-**Carbon Mirror Foundation** (this repository)
-- Maintains the open Carbon Mirror Standard
-- Community-driven governance
-- Free and open documentation
-- Non-profit structure (in development)
-
-**Carbon Mirror Labs Inc.** (independent commercial entity)
-- Provides professional CMS training and certification
-- Offers consulting and implementation services
-- Operates independently from the CMS Foundation
-- Not affiliated with Foundation governance
-
-For commercial training and consulting services, visit: [carbonmirrorlabs.com](https://carbonmirrorlabs.com)
-
----
-
 ## 🔒 Licensing
 
 The project is licensed under **Creative Commons BY 4.0**.
@@ -320,7 +305,21 @@ If you build or operate digital systems, you're welcome here.
 - Operates independently from CMS Foundation governance
 - Not affiliated with Foundation decision-making
 
-For commercial training and consulting: [carbonmirrorlabs.com](https://carbonmirrorlabs.com)
+---
+
+## 💼 Commercial Training & Consulting
+
+While the Carbon Mirror Standard is free and open, some organizations prefer professional guidance for implementation.
+
+**Commercial providers offering CMS services include:**
+- [Carbon Mirror Labs Inc.](https://carbonmirrorlabs.com) — Training, certification, and consulting (independent from CMS Foundation)
+
+**Other providers:** If your organization offers CMS training or consulting, you can [submit a PR](https://github.com/carbon-mirror-project/carbon-mirror-standard/pulls) to be listed here. Providers must:
+- Demonstrate CMS expertise
+- Commit to vendor-neutral teaching of the standard
+- Not claim exclusive authorization from the Foundation
+
+The Foundation does not endorse specific providers but maintains this list for community reference.
 
 ---
 

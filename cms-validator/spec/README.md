@@ -21,7 +21,7 @@ This repository provides:
 ## Canonical Specification (START HERE)
 
 📘 **Validator Specification v1.0**  
-➡️ [`spec/Validator_Specification_v1.0.md`](spec/Validator_Specification_v1.0.md)
+➡️ [`Validator_Specification_v1.0.md`](Validator_Specification_v1.0.md)
 
 This document defines:
 

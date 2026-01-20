@@ -11,6 +11,38 @@ The terms **MUST**, **SHALL**, **SHOULD**, and **MAY** are to be interpreted as 
 
 ---
 
+## Table of Contents
+
+1. [Purpose and Authority](#1-purpose-and-authority)
+   - [Purpose](#11-purpose)
+   - [Authority](#12-authority)
+2. [Scope and Non-Scope](#2-scope-and-non-scope)
+   - [In Scope](#21-in-scope)
+   - [Out of Scope](#22-out-of-scope)
+3. [Inputs](#3-inputs)
+   - [Telemetry Bundle (REQUIRED)](#31-telemetry-bundle-required)
+   - [Validation Profile (REQUIRED)](#32-validation-profile-required)
+4. [Deterministic Validation Pipeline](#4-deterministic-validation-pipeline)
+   - [Phase 1 — Structural Validation](#phase-1--structural-validation-mandatory)
+   - [Phase 2 — Plausibility and Anti-Gaming Checks](#phase-2--plausibility-and-anti-gaming-checks)
+   - [Phase 3 — Metric Calculation](#phase-3--metric-calculation)
+   - [Phase 4 — Gating Rules Enforcement](#phase-4--gating-rules-enforcement)
+   - [Phase 5 — Composite Efficiency Score (CES)](#phase-5--composite-efficiency-score-ces)
+   - [Phase 6 — Tier Assignment](#phase-6--tier-assignment)
+5. [Outputs](#5-outputs)
+   - [Validation Report (REQUIRED)](#51-validation-report-required)
+   - [Cryptographic Attestation (MANDATORY)](#52-cryptographic-attestation-mandatory)
+6. [Exit Codes](#6-exit-codes-cli-implementations)
+7. [Determinism and Reproducibility](#7-determinism-and-reproducibility)
+8. [Versioning and Compatibility](#8-versioning-and-compatibility)
+9. [Security Considerations](#9-security-considerations)
+10. [Conformance Statement](#10-conformance-statement)
+11. [Canonicalization](#11-canonicalization)
+
+---
+
+
+
 ## 1. Purpose and Authority
 
 ### 1.1 Purpose

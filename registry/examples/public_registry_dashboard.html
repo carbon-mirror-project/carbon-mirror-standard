@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Carbon Mirror Public Registry</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background: #f7f7f7;
+      color: #222;
+    }
+    h1 {
+      margin-top: 0;
+    }
+    p.subtitle {
+      color: #555;
+      max-width: 700px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 2rem;
+      background: #fff;
+    }
+    th, td {
+      padding: 0.75rem 0.75rem;
+      border-bottom: 1px solid #e0e0e0;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #fafafa;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #333;
+    }
+    tr:hover {
+      background: #f3f3f3;
+    }
+    .tier {
+      font-weight: 600;
+    }
+    .obsidian {
+      color: #4b0082;
+    }
+    .silver {
+      color: #666;
+    }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid #ddd;
+      font-size: 0.85rem;
+      color: #555;
+    }
+    code {
+      background: #eee;
+      padding: 0.15rem 0.3rem;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Carbon Mirror Public Registry</h1>
+  <p class="subtitle">
+    This registry displays certification outcomes produced by the
+    <strong>CMS Validator</strong> under the Carbon Mirror Standard v1.0.
+    It is a read-only view. Scores and tiers are not calculated here.
+  </p>
+
+  <table id="registry-table">
+    <thead>
+      <tr>
+        <th>Organization</th>
+        <th>Profile</th>
+        <th>Tier</th>
+        <th>CES</th>
+        <th>Mirror Scores</th>
+        <th>Measurement Window</th>
+        <th>Validated At</th>
+        <th>Attestation Hash</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- rows injected by JS -->
+    </tbody>
+  </table>
+
+  <footer>
+    <p>
+      Data source: <code>mock_public_registry.json</code><br />
+      CMS Version: 1.0 · Validator Version: 1.0.0<br />
+      This dashboard is non-authoritative. The validator output is canonical.
+    </p>
+  </footer>
+
+<script>
+fetch('mock_public_registry.json')
+  .then(response => response.json())
+  .then(data => {
+    const tbody = document.querySelector('#registry-table tbody');
+
+    data.entries.forEach(entry => {
+      const tr = document.createElement('tr');
+
+      const tierClass = entry.certification.tier.toLowerCase().includes('silver')
+        ? 'silver'
+        : 'obsidian';
+
+      tr.innerHTML = `
+        <td>
+          <strong>${entry.organization.display_name}</strong><br/>
+          <small>${entry.organization.website}</small>
+        </td>
+        <td>${entry.organization.industry_profile}</td>
+        <td class="tier ${tierClass}">${entry.certification.tier}</td>
+        <td>${entry.certification.composite_efficiency_score.toFixed(1)}</td>
+        <td>
+          Eff: ${entry.certification.mirror_scores.efficiency}<br/>
+          Time: ${entry.certification.mirror_scores.timing}<br/>
+          Data: ${entry.certification.mirror_scores.data_diet}<br/>
+          Circ: ${entry.certification.mirror_scores.circularity}
+        </td>
+        <td>
+          ${entry.certification.measurement_window.start}<br/>
+          ${entry.certification.measurement_window.end}
+        </td>
+        <td>${entry.certification.validated_at}</td>
+        <td><code>${entry.attestation.hash.slice(0, 16)}…</code></td>
+      `;
+
+      tbody.appendChild(tr);
+    });
+  })
+  .catch(err => {
+    console.error('Failed to load registry data:', err);
+  });
+</script>
+
+</body>
+</html>
